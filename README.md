@@ -74,3 +74,5 @@ The Main Spice is the end-to-end test on the exact submitted release APK. See th
 ## Observed results November 18 2026
 
 The release gate, independent browser live update, process restart, device reboot, clear-data recovery, physical-offline retry, intentional empty board and separate emulator demonstration passed. All 10 automated rules cases passed with 0 failures/skips; Flutter analyze reported no issues. `evidence/test-summary.json` identifies the exact delivery APK hash, observed emulator isolation hash and test outcomes. `evidence/rules-tests.txt` is the actual rules process output. The evidence document contains 27 captioned screenshots, reflections, lifetime analysis and two case-file arguments.
+
+[Download the reflection and evidence document](docs/HW02_OmSwaroopReddyUdumula.docx). It contains 27 real captioned screenshots across 26 visually checked pages.

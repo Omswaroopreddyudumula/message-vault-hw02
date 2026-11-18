@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 public class ReleaseGateTest {
  UiDevice d; Context c; Bundle args;
  @Before public void setup() throws Exception {
+  Configurator.getInstance().setWaitForIdleTimeout(500).setWaitForSelectorTimeout(1000);
   d=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
   c=InstrumentationRegistry.getInstrumentation().getTargetContext();
   args=InstrumentationRegistry.getArguments();
@@ -24,20 +25,23 @@ public class ReleaseGateTest {
  }
  UiObject2 id(String name) { UiObject2 o=d.wait(Until.findObject(By.res(name)),20000); assertNotNull("Missing "+name,o);return o; }
  void click(String name) { id(name).click(); d.waitForIdle(); }
- void text(String name,String value) { UiObject2 o=id(name);if(!"android.widget.EditText".equals(o.getClassName())){o=o.findObject(By.clazz("android.widget.EditText"));}assertNotNull("Editable "+name,o);o.setText(value);d.pressBack();d.waitForIdle(); }
- void sees(String value){assertTrue("Missing text: "+value,d.wait(Until.hasObject(By.textContains(value)),30000));}
+ void text(String name,String value)throws Exception { UiObject2 o=id(name);if(!"android.widget.EditText".equals(o.getClassName())){o=o.findObject(By.clazz("android.widget.EditText"));}assertNotNull("Editable "+name,o);o.click();Thread.sleep(400);o.setText(value);Thread.sleep(300);if(d.hasObject(By.pkg("com.google.android.inputmethod.latin"))||d.hasObject(By.pkg("com.android.inputmethod.latin")))d.pressBack();d.waitForIdle(); }
+ boolean visible(String value){return d.hasObject(By.textContains(value))||d.hasObject(By.descContains(value));}
+ void sees(String value)throws Exception{long until=System.currentTimeMillis()+30000;while(!visible(value)&&System.currentTimeMillis()<until)Thread.sleep(200);assertTrue("Missing text: "+value,visible(value));}
+ @After public void diagnostic()throws Exception{shot("last-state");d.dumpWindowHierarchy(new File(c.getExternalFilesDir(null),"hierarchy.xml"));}
  void shot(String name)throws Exception {File dir=new File(c.getExternalFilesDir(null),"screenshots");dir.mkdirs();assertTrue(d.takeScreenshot(new File(dir,name+".png")));}
- void login(String who){text("email",args.getString(who+"Email"));text("password",args.getString("password"));click("auth_submit");id("post_input");}
- void register(String who,String first){click("auth_toggle");text("first_name",first);text("last_name","VaultTest");text("email",args.getString(who+"Email"));text("password",args.getString("password"));click("auth_submit");id("post_input");}
- void post(String value){text("post_input",value);click("post_submit");sees("Message posted.");sees(value);}
+ void login(String who)throws Exception{text("email",args.getString(who+"Email"));text("password",args.getString("password"));click("auth_submit");id("post_input");}
+ void register(String who,String first)throws Exception{if(!d.hasObject(By.res("first_name")))click("auth_toggle");text("first_name",first);text("last_name","VaultTest");text("email",args.getString(who+"Email"));text("password",args.getString("password"));click("auth_submit");id("post_input");}
+ void post(String value)throws Exception{text("post_input",value);click("post_submit");sees("Message posted.");sees(value);}
  void probe(String name,String screenshot)throws Exception{click("rules_checks");click(name);sees("permission-denied");shot(screenshot);}
+ @Test public void splashOnly()throws Exception{if(d.wait(Until.hasObject(By.res("splash")),1000))shot("00-splash");else throw new AssertionError("Splash was not observed");}
  @Test public void releaseFlow() throws Exception {
   id("auth_submit");click("auth_submit");sees("Enter a valid email.");shot("01-validation");
-  register("b","Riley");click("profile");sees("student");shot("02-five-field-profile");d.pressBack();
+  register("b","Riley");if(d.hasObject(By.res("empty_board")))shot("02a-empty-board");click("profile");sees("student");shot("02-five-field-profile");d.pressBack();
   post("B witness retained "+args.getString("run"));shot("03-create-B");click("sign_out");
   // The screen keeps credentials in the same route only until auth routing disposes it.
-  register("a","Om");post("A original "+args.getString("run"));shot("04-create-A");
-  click("rules_checks");click("repeat_post");sees("Already saved; no duplicate created.");shot("05-idempotent-retry");
+  register("a","Om");text("post_input","A original "+args.getString("run"));UiObject2 submit=id("post_submit");submit.click();submit.click();sees("Message posted.");shot("04-create-A");
+  click("rules_checks");click("repeat_post");sees("Already saved; no duplicate created.");sees("2 messages");shot("05-idempotent-retry");
   UiObject2 edit=d.findObject(By.res(java.util.regex.Pattern.compile("edit_.*")));assertNotNull(edit);edit.click();text("edit_input","A edited "+args.getString("run"));click("save_edit");sees("A edited "+args.getString("run"));shot("06-edit");
   probe("probe_foreign_edit","07-wrong-user-edit-denied");probe("probe_foreign_delete","08-wrong-user-delete-denied");probe("probe_forged","09-forged-author-denied");
   UiObject2 del=d.findObject(By.res(java.util.regex.Pattern.compile("delete_.*")));assertNotNull(del);del.click();click("confirm_delete");sees("Message deleted.");sees("B witness retained "+args.getString("run"));shot("10-delete-single");
@@ -49,6 +53,25 @@ public class ReleaseGateTest {
  @Test public void restoredSession()throws Exception {id("post_input");sees("A survivor "+args.getString("run"));assertFalse("Draft unexpectedly persisted",d.hasObject(By.textContains("Unsent volatile draft")));shot(args.getString("label","15-restored"));}
  @Test public void afterClearData()throws Exception{id("auth_submit");shot("17-cleared-data-signed-out");login("a");sees("A survivor "+args.getString("run"));shot("18-cloud-survives-clear-data");}
  @Test public void liveWindow()throws Exception{id("post_input");sees("B live "+args.getString("run"));shot("19-live-second-window");}
- @Test public void offlineStart()throws Exception{id("post_input");sees("B witness retained "+args.getString("run"));text("post_input","Offline retry "+args.getString("run"));click("post_submit");sees("same post ID is retained");shot("20-offline-post-error");}
- @Test public void offlineRetry()throws Exception{id("post_input");click("post_submit");sees("Message posted.");sees("Offline retry "+args.getString("run"));shot("21-offline-retry-recovered");}
+ @Test public void offlineFull()throws Exception {
+  id("post_input");sees("A survivor "+args.getString("run"));
+  try {
+   d.executeShellCommand("svc wifi disable");d.executeShellCommand("svc data disable");Thread.sleep(4000);
+   String network=d.executeShellCommand("dumpsys connectivity");
+   java.nio.file.Files.write(new File(c.getExternalFilesDir(null),"offline-network.txt").toPath(),network.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+   assertTrue("Device still has a default network",network.contains("Active default network: none"));
+   text("post_input","Offline retry "+args.getString("run"));click("post_submit");
+   long until=System.currentTimeMillis()+90000;while(!visible("same post ID is retained")&&System.currentTimeMillis()<until)Thread.sleep(300);
+   assertTrue("Offline transaction must fail safely",visible("same post ID is retained"));shot("20-offline-post-error");
+  } finally {d.executeShellCommand("svc wifi enable");d.executeShellCommand("svc data enable");}
+  Thread.sleep(5000);click("post_submit");sees("Message posted.");sees("Offline retry "+args.getString("run"));shot("21-offline-retry-recovered");
+ }
+ @Test public void emulatorOnly()throws Exception{id("auth_submit");login("a");sees("B emulated seed");post("A emulated client "+args.getString("run"));shot("23-emulator-app");}
+ @Test public void emptyBoard()throws Exception {
+  id("post_input");
+  while(d.hasObject(By.res(java.util.regex.Pattern.compile("delete_.*")))){d.findObject(By.res(java.util.regex.Pattern.compile("delete_.*"))).click();click("confirm_delete");sees("Message deleted.");Thread.sleep(500);}
+  click("sign_out");login("b");
+  while(d.hasObject(By.res(java.util.regex.Pattern.compile("delete_.*")))){d.findObject(By.res(java.util.regex.Pattern.compile("delete_.*"))).click();click("confirm_delete");sees("Message deleted.");Thread.sleep(500);}
+  id("empty_board");sees("No messages yet");shot("22-empty-board");
+ }
 }

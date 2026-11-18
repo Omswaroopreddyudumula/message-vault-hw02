@@ -1,0 +1,8 @@
+{
+  "source": "lib/main.dart",
+  "normalStartup": "await initializeServices before runApp",
+  "coversInitialization": "Android styled LaunchTheme, Android 12+ native splash resources",
+  "afterInitialization": "Flutter branded splash; minimum duration after first rasterized frame",
+  "failure": "caught startup error reaches retry UI",
+  "sourceOrderVerified": true
+}

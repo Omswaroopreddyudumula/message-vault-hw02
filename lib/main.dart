@@ -8,13 +8,23 @@ import 'services/board_service.dart';
 
 Widget tagged(String id, Widget child) =>
     Semantics(identifier: id, child: child);
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const VaultApp());
+  Services? services;
+  Object? startupError;
+  try {
+    // Android's styled launch theme remains visible during this awaited setup.
+    services = await initializeServices();
+  } catch (error) {
+    startupError = error;
+  }
+  runApp(VaultApp(initialServices: services, startupError: startupError));
 }
 
 class VaultApp extends StatelessWidget {
-  const VaultApp({super.key});
+  const VaultApp({super.key, this.initialServices, this.startupError});
+  final Services? initialServices;
+  final Object? startupError;
   @override
   Widget build(BuildContext context) => MaterialApp(
     title: 'Message Vault',
@@ -24,12 +34,17 @@ class VaultApp extends StatelessWidget {
       scaffoldBackgroundColor: const Color(0xfffffcf4),
       useMaterial3: true,
     ),
-    home: const LaunchScreen(),
+    home: LaunchScreen(
+      initialServices: initialServices,
+      startupError: startupError,
+    ),
   );
 }
 
 class LaunchScreen extends StatefulWidget {
-  const LaunchScreen({super.key});
+  const LaunchScreen({super.key, this.initialServices, this.startupError});
+  final Services? initialServices;
+  final Object? startupError;
   @override
   State<LaunchScreen> createState() => _LaunchScreenState();
 }
@@ -39,11 +54,15 @@ class _LaunchScreenState extends State<LaunchScreen> {
   @override
   void initState() {
     super.initState();
-    future = load();
+    future = load(ready: widget.initialServices, error: widget.startupError);
   }
 
-  Future<Services> load() async {
-    final services = initializeServices();
+  Future<Services> load({Services? ready, Object? error}) async {
+    final services = error != null
+        ? Future<Services>.error(error)
+        : ready != null
+        ? Future<Services>.value(ready)
+        : initializeServices();
     final minimumVisible = WidgetsBinding.instance.waitUntilFirstFrameRasterized
         .then((_) => Future<void>.delayed(const Duration(milliseconds: 1800)));
     final values = await Future.wait<Object?>([services, minimumVisible]);

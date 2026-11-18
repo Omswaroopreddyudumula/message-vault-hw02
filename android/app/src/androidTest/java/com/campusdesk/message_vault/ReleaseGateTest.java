@@ -37,10 +37,11 @@ public class ReleaseGateTest {
  @Test public void splashOnly()throws Exception {
   File dir=new File(c.getExternalFilesDir(null),"screenshots");dir.mkdirs();boolean found=false;
   for(int i=0;i<45;i++) {
+   boolean flutterSplash=d.hasObject(By.res("splash"));
    android.graphics.Bitmap bitmap=InstrumentationRegistry.getInstrumentation().getUiAutomation().takeScreenshot();
    if(bitmap!=null) {
     int pixel=bitmap.getPixel(bitmap.getWidth()/8,bitmap.getHeight()/2);
-    if(android.graphics.Color.green(pixel)>android.graphics.Color.red(pixel)+25 && android.graphics.Color.red(pixel)<100) {
+    if(flutterSplash && android.graphics.Color.green(pixel)>android.graphics.Color.red(pixel)+25 && android.graphics.Color.red(pixel)<100) {
      try(java.io.FileOutputStream stream=new java.io.FileOutputStream(new File(dir,"00-splash.png"))){assertTrue(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG,100,stream));}
      found=true;bitmap.recycle();break;
     }

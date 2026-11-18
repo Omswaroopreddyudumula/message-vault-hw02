@@ -5,7 +5,7 @@
     "version": "1.0.0+1",
     "device": "Pixel_8 Android Emulator sdk_gphone16k_arm64",
     "android": "17 API 37",
-    "sha256": "01bcb94d40c19de17b82e1347ce511518b746052ab5ed5bf33d12432cf2fb2c8",
+    "sha256": "9e30413095a0d17ae4b0dd1c5ebf7d05e3f02e16430f4e618b80421f53de5fb9",
     "installedEqualsDelivered": true
   },
   "cloudReleaseChecks": {
@@ -54,10 +54,10 @@
   "emulatorIsolation": {
     "project": "demo-message-vault",
     "liveProject": "message-vault-om-261118",
-    "beforeHash": "cd426e313546169f53bc19aa5587735a5687a55ab5ef9d0f7e1e59867b8fe3d6",
-    "afterHash": "cd426e313546169f53bc19aa5587735a5687a55ab5ef9d0f7e1e59867b8fe3d6",
+    "beforeHash": "5da9012b34a647844c08bcb434553ff1f20929af42d90d933380b55e68397f21",
+    "afterHash": "5da9012b34a647844c08bcb434553ff1f20929af42d90d933380b55e68397f21",
     "unchanged": true,
-    "users": 2,
+    "users": 8,
     "messages": 4
   },
   "offlineRecovery": {

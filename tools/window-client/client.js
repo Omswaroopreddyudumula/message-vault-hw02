@@ -1,0 +1,8 @@
+import {initializeApp} from 'firebase/app';
+import {getAuth,signInWithEmailAndPassword} from 'firebase/auth';
+import {getFirestore,doc,getDoc,collection,query,orderBy,onSnapshot,runTransaction,serverTimestamp} from 'firebase/firestore';
+const config=await (await fetch('/config.json')).json();
+const app=initializeApp(config),auth=getAuth(app),db=getFirestore(app);
+const $=id=>document.getElementById(id);let profile,unsubscribe,pending;
+$('login').onclick=async()=>{try{await signInWithEmailAndPassword(auth,$('email').value,$('password').value);$('password').value='';profile=(await getDoc(doc(db,'users',auth.currentUser.uid))).data();$('state').textContent=`Signed in as ${profile.firstName} · ${auth.currentUser.uid}`;unsubscribe?.();unsubscribe=onSnapshot(query(collection(db,'messages'),orderBy('createdAt')),s=>{$('board').replaceChildren(...s.docs.map(d=>{const a=document.createElement('article');a.textContent=`${d.data().authorName}: ${d.data().text} · ${d.id}`;return a}));},e=>$('state').textContent=e.code);}catch(e){$('state').textContent=e.code}};
+$('post').onclick=async()=>{try{const text=$('message').value.trim();if(!text||text.length>500)throw Error('Use 1–500 characters');pending??={ref:doc(collection(db,'messages')),text};$('post').disabled=true;await runTransaction(db,async tx=>{if((await tx.get(pending.ref)).exists())return;tx.set(pending.ref,{text:pending.text,authorUid:auth.currentUser.uid,authorName:profile.firstName,createdAt:serverTimestamp(),editedAt:null});});$('state').textContent=`Posted ${pending.ref.id}`;pending=null;$('message').value='';}catch(e){$('state').textContent=e.code||e.message}finally{$('post').disabled=false}};

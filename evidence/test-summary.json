@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-18",
+  "releaseApk": {
+    "package": "com.campusdesk.message_vault",
+    "version": "1.0.0+1",
+    "device": "Pixel_8 Android Emulator sdk_gphone16k_arm64",
+    "android": "17 API 37",
+    "sha256": "01bcb94d40c19de17b82e1347ce511518b746052ab5ed5bf33d12432cf2fb2c8",
+    "installedEqualsDelivered": true
+  },
+  "cloudReleaseChecks": {
+    "releaseFlow": {
+      "passed": true,
+      "build": "delivered release"
+    },
+    "liveWindow": {
+      "passed": true,
+      "build": "delivered release"
+    },
+    "afterClearData": {
+      "passed": true,
+      "build": "delivered release"
+    },
+    "offlineFull": {
+      "passed": true,
+      "build": "delivered release"
+    },
+    "splashOnly": {
+      "passed": true,
+      "build": "delivered release"
+    },
+    "emptyBoard": {
+      "passed": true,
+      "build": "delivered release"
+    },
+    "emulatorOnly": {
+      "passed": true,
+      "build": "emulator debug"
+    },
+    "15-after-process-stop": {
+      "passed": true,
+      "build": "delivered release"
+    },
+    "16-after-device-reboot": {
+      "passed": true,
+      "build": "delivered release"
+    }
+  },
+  "rules": {
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0
+  },
+  "emulatorIsolation": {
+    "project": "demo-message-vault",
+    "liveProject": "message-vault-om-261118",
+    "beforeHash": "cd426e313546169f53bc19aa5587735a5687a55ab5ef9d0f7e1e59867b8fe3d6",
+    "afterHash": "cd426e313546169f53bc19aa5587735a5687a55ab5ef9d0f7e1e59867b8fe3d6",
+    "unchanged": true,
+    "users": 2,
+    "messages": 4
+  },
+  "offlineRecovery": {
+    "activeDefaultNetwork": "none",
+    "cloudDocumentCountBefore": 3,
+    "cloudDocumentCountAfter": 4,
+    "newDocumentCount": 1
+  }
+}

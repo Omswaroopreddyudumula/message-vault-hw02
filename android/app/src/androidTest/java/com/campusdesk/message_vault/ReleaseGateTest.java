@@ -34,13 +34,28 @@ public class ReleaseGateTest {
  void register(String who,String first)throws Exception{if(!d.hasObject(By.res("first_name")))click("auth_toggle");text("first_name",first);text("last_name","VaultTest");text("email",args.getString(who+"Email"));text("password",args.getString("password"));click("auth_submit");id("post_input");}
  void post(String value)throws Exception{text("post_input",value);click("post_submit");sees("Message posted.");sees(value);}
  void probe(String name,String screenshot)throws Exception{click("rules_checks");click(name);sees("permission-denied");shot(screenshot);}
- @Test public void splashOnly()throws Exception{if(d.wait(Until.hasObject(By.res("splash")),1000))shot("00-splash");else throw new AssertionError("Splash was not observed");}
+ @Test public void splashOnly()throws Exception {
+  File dir=new File(c.getExternalFilesDir(null),"screenshots");dir.mkdirs();boolean found=false;
+  for(int i=0;i<45;i++) {
+   android.graphics.Bitmap bitmap=InstrumentationRegistry.getInstrumentation().getUiAutomation().takeScreenshot();
+   if(bitmap!=null) {
+    int pixel=bitmap.getPixel(bitmap.getWidth()/8,bitmap.getHeight()/2);
+    if(android.graphics.Color.green(pixel)>android.graphics.Color.red(pixel)+25 && android.graphics.Color.red(pixel)<100) {
+     try(java.io.FileOutputStream stream=new java.io.FileOutputStream(new File(dir,"00-splash.png"))){assertTrue(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG,100,stream));}
+     found=true;bitmap.recycle();break;
+    }
+    bitmap.recycle();
+   }
+   Thread.sleep(100);
+  }
+  assertTrue("Styled teal splash was not visually observed",found);
+ }
  @Test public void releaseFlow() throws Exception {
   id("auth_submit");click("auth_submit");sees("Enter a valid email.");shot("01-validation");
   register("b","Riley");if(d.hasObject(By.res("empty_board")))shot("02a-empty-board");click("profile");sees("student");shot("02-five-field-profile");d.pressBack();
   post("B witness retained "+args.getString("run"));shot("03-create-B");click("sign_out");
   // The screen keeps credentials in the same route only until auth routing disposes it.
-  register("a","Om");text("post_input","A original "+args.getString("run"));UiObject2 submit=id("post_submit");submit.click();submit.click();sees("Message posted.");shot("04-create-A");
+  register("a","Om");text("post_input","A original "+args.getString("run"));UiObject2 submit=id("post_submit");submit.click();submit.click();sees("A original "+args.getString("run"));sees("2 messages");shot("04-create-A");
   click("rules_checks");click("repeat_post");sees("Already saved; no duplicate created.");sees("2 messages");shot("05-idempotent-retry");
   UiObject2 edit=d.findObject(By.res(java.util.regex.Pattern.compile("edit_.*")));assertNotNull(edit);edit.click();text("edit_input","A edited "+args.getString("run"));click("save_edit");sees("A edited "+args.getString("run"));shot("06-edit");
   probe("probe_foreign_edit","07-wrong-user-edit-denied");probe("probe_foreign_delete","08-wrong-user-delete-denied");probe("probe_forged","09-forged-author-denied");

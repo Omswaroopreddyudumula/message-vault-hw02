@@ -1,0 +1,8 @@
+{
+  "package": "com.campusdesk.message_vault",
+  "version": "1.0.0+1",
+  "device": "Pixel_8 Android Emulator sdk_gphone16k_arm64",
+  "android": "17 API 37",
+  "sha256": "01bcb94d40c19de17b82e1347ce511518b746052ab5ed5bf33d12432cf2fb2c8",
+  "installedEqualsDelivered": true
+}

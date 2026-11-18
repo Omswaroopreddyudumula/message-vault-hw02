@@ -1,0 +1,98 @@
+[
+  {
+    "file": "00-splash.png",
+    "sha256": "3b42ccdbd45d4b10ed1c9fe6ecd5de93a5f84ce954ed8a9d445f1f6d64379283"
+  },
+  {
+    "file": "01-validation.png",
+    "sha256": "a9d69b48f57aea00a6b9f7b93595881c9eeb4988966ed299bac54325939854d0"
+  },
+  {
+    "file": "02-five-field-profile.png",
+    "sha256": "9a229cade422f656b6ac4c0014ca3bb6da3b86a1bbdd85f207bb328e3e43d864"
+  },
+  {
+    "file": "03-create-B.png",
+    "sha256": "471b233fb1cda7746cfeff508badb5b6c9f1f1fca8527c7bf57eeebaf381e1f7"
+  },
+  {
+    "file": "04-create-A.png",
+    "sha256": "5625dd6143bc798b811a36c49e20b912b48d40736e1189ff39b237ebcf587ffa"
+  },
+  {
+    "file": "05-idempotent-retry.png",
+    "sha256": "3f708291203bded6df30ec77c7f41fc470aa3fe9759cc69759d6307a56efd430"
+  },
+  {
+    "file": "06-edit.png",
+    "sha256": "f4a6a4f658df13b56233dcf75cb59ab5d4c57233545120f32eebd5fd612c3146"
+  },
+  {
+    "file": "07-wrong-user-edit-denied.png",
+    "sha256": "35493bec7b1c3c5b51283c5c0cb4f6275bd4eb3d9b1aed8ca7d1cc3bf165ee63"
+  },
+  {
+    "file": "08-wrong-user-delete-denied.png",
+    "sha256": "6dff9eac12d451a65e612d2b9feded8e597a532f67feb9179d7b36e2de4946df"
+  },
+  {
+    "file": "09-forged-author-denied.png",
+    "sha256": "6dff9eac12d451a65e612d2b9feded8e597a532f67feb9179d7b36e2de4946df"
+  },
+  {
+    "file": "10-delete-single.png",
+    "sha256": "1d2763018ebb3c10a95fd5a0a83d59a3f45999d2390f9e629e6f6b5abd952663"
+  },
+  {
+    "file": "11-signed-out-read-denied.png",
+    "sha256": "67ce2e9293c5ef9b793cfa82381d7177bed395fca1f5c14a1f3a06109b34f285"
+  },
+  {
+    "file": "12-invalid-login.png",
+    "sha256": "ff1b524798b19d939a3f0e3deed6108c6fdf82d64b6e72eccd819d59db013793"
+  },
+  {
+    "file": "13-login-board.png",
+    "sha256": "eba09f86838bc69d757d5256214b3c6e8300e1f27e6c89a27de36dc308e77b8b"
+  },
+  {
+    "file": "14-unsent-draft.png",
+    "sha256": "70e349e8ad159f19d7ca8a27f69c362aa283f66ac8679c2bf88794f9f904e910"
+  },
+  {
+    "file": "15-after-process-stop.png",
+    "sha256": "b883926aeea9c68e7e3732ffe6fbbe8b3f168af95a03618bdea8bd77e6268aba"
+  },
+  {
+    "file": "16-after-device-reboot.png",
+    "sha256": "03bf0cecccbc2373a5ab9b34ca1cd8b7c765565856b3bd60161e8c5088c309dc"
+  },
+  {
+    "file": "17-cleared-data-signed-out.png",
+    "sha256": "c6265555aed39b7bbebc40210eb78cdbca29ab6a2809717f465009997bc9c012"
+  },
+  {
+    "file": "18-cloud-survives-clear-data.png",
+    "sha256": "93909cdd2c53cde3e26f45436fbad79e79fe35706690f440bcbc5e8bfddf87e0"
+  },
+  {
+    "file": "19-live-second-window.png",
+    "sha256": "f92e5b87e51874bab07720f0b573f8c63809a7f60111436fdfa9d5185bbf55ca"
+  },
+  {
+    "file": "20-offline-post-error.png",
+    "sha256": "6e093ec41ab7d0bda59515ee5d9fd399e6d84b52513f6e2b3ce1412cbbe0c499"
+  },
+  {
+    "file": "21-offline-retry-recovered.png",
+    "sha256": "0541d79b6aab4c15e0f6259af11ab5275b250454aa2975cef375ca12fe72dee1"
+  },
+  {
+    "file": "22-empty-board.png",
+    "sha256": "27f72f486050fcfc99da74ed37a6f1a366d046571d6b92b154b1c28114ed74a4"
+  },
+  {
+    "file": "23-emulator-app.png",
+    "sha256": "018b5eb275d9a59b8ca75b7e480c40c4d7b4110ed6cf7544a5d87a1195611152"
+  }
+]

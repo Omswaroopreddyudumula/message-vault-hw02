@@ -43,10 +43,11 @@ class _LaunchScreenState extends State<LaunchScreen> {
   }
 
   Future<Services> load() async {
-    final minimum = Future<void>.delayed(const Duration(milliseconds: 1600));
-    final services = await initializeServices();
-    await minimum;
-    return services;
+    final services = initializeServices();
+    final minimumVisible = WidgetsBinding.instance.waitUntilFirstFrameRasterized
+        .then((_) => Future<void>.delayed(const Duration(milliseconds: 1800)));
+    final values = await Future.wait<Object?>([services, minimumVisible]);
+    return values.first as Services;
   }
 
   @override

@@ -14,7 +14,7 @@ The classroom APK uses a local development signing certificate. It is a Flutter 
 
 ## Flow and architecture
 
-The styled splash holds the initialization future and offers retry on failure. AuthService owns registration, sign-in, sign-out, current user and one stable auth-state stream. AuthGate routes from the stream. ProfileGate waits for a complete private record before entering the board. If Auth succeeds but profile creation fails, repair the record for the existing uid; do not create another account. Registration retries never reset the original server timestamp.
+The styled splash holds the initialization future and offers retry on failure. Its minimum display time begins after the first rasterized frame, so a cold start cannot consume the timer before the artwork appears. AuthService owns registration, sign-in, sign-out, current user and one stable auth-state stream. AuthGate routes from the stream. ProfileGate waits for a complete private record before entering the board. If Auth succeeds but profile creation fails, repair the record for the existing uid; do not create another account. Registration retries never reset the original server timestamp.
 
 BoardService owns every Firestore call. Widgets render typed UserRecord, BoardMessage and BoardFeed values. The board listens to one `snapshots()` stream, ordered oldest first by `createdAt`. Loading, empty, error and cache/source states have explicit UI. Controllers and route streams are disposed with their widgets.
 
@@ -70,3 +70,7 @@ The Main Spice is the end-to-end test on the exact submitted release APK. See th
 - https://firebase.google.com/docs/firestore/security/test-rules-emulator
 - https://docs.flutter.dev/deployment/android
 - https://developer.android.com/training/testing/other-components/ui-automator-legacy
+
+## Observed results November 18 2026
+
+The release gate, independent browser live update, process restart, device reboot, clear-data recovery, physical-offline retry, intentional empty board and separate emulator demonstration passed. All 10 automated rules cases passed with 0 failures/skips; Flutter analyze reported no issues. `evidence/test-summary.json` identifies the exact delivery APK hash, observed emulator isolation hash and test outcomes. `evidence/rules-tests.txt` is the actual rules process output. The evidence document contains 27 captioned screenshots, reflections, lifetime analysis and two case-file arguments.

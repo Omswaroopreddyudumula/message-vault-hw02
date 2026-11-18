@@ -1,0 +1,38 @@
+
+> test
+> node --test rules.test.mjs
+
+✔ signed-out board read denied (764.241958ms)
+[2026-11-18T07:39:07.928Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x60c806cf error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L27:21 for 'update' @ L27, false for 'update' @ L32, false for 'update' @ L27, false for 'update' @ L32
+✔ cross-uid edit denied (86.340666ms)
+[2026-11-18T07:39:07.968Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x60c806d1 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L30:21 for 'delete' @ L30, false for 'delete' @ L32, false for 'delete' @ L30, false for 'delete' @ L32
+✔ cross-uid delete denied (40.152458ms)
+[2026-11-18T07:39:08.013Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x60c806d3 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L20:21 for 'create' @ L20, false for 'create' @ L32, evaluation error at L27:21 for 'update' @ L27, false for 'update' @ L32, false for 'create' @ L20, false for 'create' @ L32
+✔ forged author create denied (45.153583ms)
+✔ correct author full CRUD allowed (71.023083ms)
+✔ public board readable by second authenticated user (32.859041ms)
+✔ private profile unreadable to another uid (33.105167ms)
+[2026-11-18T07:39:08.184Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x60c806dc error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L27:21 for 'update' @ L27, false for 'update' @ L32, false for 'update' @ L27, false for 'update' @ L32
+[2026-11-18T07:39:08.200Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x60c806dd error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L27:21 for 'update' @ L27, false for 'update' @ L32, false for 'update' @ L27, false for 'update' @ L32
+✔ owner cannot change author or creation time (49.311375ms)
+[2026-11-18T07:39:08.238Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x60c806df error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L20:21 for 'create' @ L20, false for 'create' @ L32, evaluation error at L27:21 for 'update' @ L27, false for 'update' @ L32, false for 'create' @ L20, false for 'create' @ L32
+[2026-11-18T07:39:08.252Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x60c806e0 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L20:21 for 'create' @ L20, false for 'create' @ L32, evaluation error at L27:21 for 'update' @ L27, false for 'update' @ L32, false for 'create' @ L20, false for 'create' @ L32
+✔ whitespace-only and extra credential fields rejected (52.518541ms)
+[2026-11-18T07:39:08.302Z]  @firebase/firestore: Firestore (12.19.0): GrpcConnection RPC 'Write' stream 0x60c806e3 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L8:21 for 'create' @ L8, false for 'create' @ L32, false for 'update' @ L16, false for 'update' @ L32, false for 'create' @ L8, false for 'create' @ L32
+✔ exact five-field own profile accepted; elevated role denied (48.878209ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1463.820583
